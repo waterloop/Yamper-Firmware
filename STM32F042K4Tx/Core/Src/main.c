@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <math.h>
+#include "application_code.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,9 +32,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define N 12
-#define R 0.057
-#define SAMPLING_PERIOD_S 0.1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,10 +46,6 @@ TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim14;
 
 /* USER CODE BEGIN PV */
-float* velocity;
-uint8_t bytes_array[4];
-CAN_TxHeaderTypeDef TxHeader;
-extern uint32_t TxMailbox;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,27 +55,10 @@ static void MX_CAN_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM14_Init(void);
 /* USER CODE BEGIN PFP */
-void init_timer(void);
-float compute_rpm(int n);
-void add_data(void *val, uint8_t *bytes_array, uint8_t size, uint8_t is_float, uint8_t start_pos);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void init_timer(void) {
-	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
-
-	TIM3->ARR = 0xFFFF;
-
-	TIM3->CCMR1 |= (TIM_CCMR1_CC1S_0 | TIM_CCMR1_CC2S_0);
-	TIM3->CCER &= ~(TIM_CCER_CC1P | TIM_CCER_CC2P);
-	TIM3->SMCR |= TIM_SMCR_SMS_0 | TIM_SMCR_SMS_1;
-	TIM3->CR1 |= TIM_CR1_CEN;
-}
-
-float compute_rpm(int n) {
-	return (2*M_PI*R*n)/(N*SAMPLING_PERIOD_S);
-}
 /* USER CODE END 0 */
 
 /**
@@ -117,9 +93,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
-  HAL_CAN_Start(&hcan);
-  HAL_TIM_Base_Start_IT(&htim14);
-  __HAL_TIM_SET_COUNTER(&htim14, 0);
+  return app_main();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -129,13 +103,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_Delay(100);
-	  int count = TIM3->CNT;
-	  *velocity = compute_rpm(count);
-	  add_data(velocity, bytes_array, 32, 1, 0);
-	  HAL_CAN_AddTxMessage(&hcan, &TxHeader, bytes_array, &TxMailbox);  // load message to mailbox
-	  while (HAL_CAN_IsTxMessagePending(&hcan, TxMailbox)); 		//waiting till message gets through
-	  TIM3->CNT=0;
   }
   /* USER CODE END 3 */
 }
@@ -208,8 +175,6 @@ static void MX_CAN_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN_Init 2 */
-  TxHeader.StdId = 0x1F;
-  TxHeader.ExtId = 0;
   /* USER CODE END CAN_Init 2 */
 
 }

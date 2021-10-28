@@ -6,7 +6,7 @@
 # Generic makefile (based on gcc)
 #
 # ChangeLog :
-#	2017-02-10 - Several enhancements + project update mode
+#    2017-02-10 - Several enhancements + project update mode
 #   2015-07-22 - first version
 # ------------------------------------------------
 
@@ -23,7 +23,7 @@ DEVICE_DIRNAME = STM32F042K4Tx
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O0
+OPT = -Og
 
 
 #######################################
@@ -40,6 +40,16 @@ BUILD_DIR = build
 USER_SOURCES := $(shell find ./$(DEVICE_DIRNAME)/Core/Src -name "*.c")
 
 HAL_SOURCES := $(shell find ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src -name "*.c")
+# HAL_SOURCES = \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_can.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_cortex.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_exti.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_gpio.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_tim.c \
+# ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_tim_ex.c
+
 
 C_SOURCES += $(HAL_SOURCES)
 C_SOURCES += $(USER_SOURCES)
@@ -67,7 +77,7 @@ SZ = $(PREFIX)size
 endif
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
- 
+
 #######################################
 # CFLAGS
 #######################################
@@ -95,7 +105,8 @@ AS_DEFS =
 C_DEFS = \
 -D USE_HAL_DRIVER \
 -D STM32F042x6 \
--D DEBUG
+-D DEBUG \
+-D RING_ENCODER
 
 
 # AS includes
@@ -107,7 +118,8 @@ C_INCLUDES =  \
 -I ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Inc \
 -I ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Inc/Legacy \
 -I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Device/ST/STM32F0xx/Include \
--I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Include
+-I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Include \
+-I ./WLoopCAN/inc
 
 C_INCLUDES += $(USER_INCLUDES)
 
@@ -159,19 +171,19 @@ $(BUILD_DIR)/%.o: %.s makefile | $(BUILD_DIR)
 	@echo ""
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) makefile
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) ./WLoopCAN/bin/wloop_can.a $(LDFLAGS) -o $@
 	@echo ""
 	$(SZ) $@
 	@echo ""
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
-	
+    
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
-	
+	$(BIN) $< $@    
+    
 $(BUILD_DIR):
-	mkdir $@		
+	mkdir $@        
 
 #######################################
 # clean up
@@ -183,7 +195,11 @@ analyze:
 	$(PREFIX)objdump -t $(BUILD_DIR)/$(TARGET).elf
 
 flash:
-	st-flash write $(BUILD_DIR)/main.bin 0x08000000 
+	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c \
+	"program $(BUILD_DIR)/$(TARGET).elf verify reset exit"
+
+gdb:
+	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c "init"
 
 #######################################
 # dependencies
