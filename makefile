@@ -194,9 +194,12 @@ clean:
 analyze:
 	$(PREFIX)objdump -t $(BUILD_DIR)/$(TARGET).elf
 
+# flash:
+# 	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c \
+# 	"program $(BUILD_DIR)/$(TARGET).elf verify reset exit"
+
 flash:
-	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c \
-	"program $(BUILD_DIR)/$(TARGET).elf verify reset exit"
+	st-flash write $(BUILD_DIR)/$(TARGET).bin 0x08000000
 
 gdb:
 	openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c "init"

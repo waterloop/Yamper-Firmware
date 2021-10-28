@@ -68,7 +68,7 @@ static void MX_TIM14_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	init_timer();
+	// init_timer();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

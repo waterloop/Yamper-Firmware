@@ -25,18 +25,28 @@ extern uint32_t TxMailbox;
 
 int app_main() {
     if (CANBus_init(&hcan) != HAL_OK) { Error_Handler(); }
-    if (CANBus_subscribe(POD_SPEED) != HAL_OK) { Error_Handler(); }
+    // if (CANBus_subscribe(POD_SPEED) != HAL_OK) { Error_Handler(); }
+    if (CANBus_subscribe_all() != HAL_OK) { Error_Handler(); }
 
-    CANFrame tx_frame = CANFrame_init(POD_SPEED.id);
-    CANFrame_set_field(&tx_frame, POD_SPEED, FLOAT_TO_UINT(69.420));
+    // CANFrame tx_frame = CANFrame_init(POD_SPEED.id);
+    // CANFrame_set_field(&tx_frame, POD_SPEED, FLOAT_TO_UINT(69.420));
 
+    // hcan.Instance->MCR |= (1 << 16);
+
+    CANFrame tx_frame;
     while (1) {
-        if (CANBus_put_frame(&tx_frame) != HAL_OK) { Error_Handler(); }
+        // if (CANBus_put_frame(&tx_frame) != HAL_OK) { Error_Handler(); }
 
         if (!Queue_empty(&RX_QUEUE)) {
             CANFrame rx_frame = CANBus_get_frame();
-            CANFrame_print(&rx_frame);
+            
+            tx_frame = CANFrame_init(rx_frame.id);
+            for (uint8_t i = 0; i < 8; i++) {
+                tx_frame.pld[i] = rx_frame.pld[i];
+            }
+            if (CANBus_put_frame(&tx_frame) != HAL_OK) { Error_Handler(); }
         }
+        HAL_Delay(5);
     }
 
     return 0;
