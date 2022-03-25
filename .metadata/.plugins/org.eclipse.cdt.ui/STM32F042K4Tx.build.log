@@ -1,0 +1,40 @@
+23:30:23 **** Incremental Build of configuration Debug for project STM32F042K4Tx ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/CAN_Driver.c" -mcpu=cortex-m0 -std=gnu11 -g3 -DDEBUG -DRING_ENCODER -DUSE_HAL_DRIVER -DSTM32F042x6 -DSTM32F042K4T6 -c -I../Core/Inc -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc" -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include" -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I../Drivers/CMSIS/Include -include"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc/can_frame.h" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/CAN_Driver.d" -MT"Core/Src/CAN_Driver.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/CAN_Driver.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0 -std=gnu11 -g3 -DDEBUG -DRING_ENCODER -DUSE_HAL_DRIVER -DSTM32F042x6 -DSTM32F042K4T6 -c -I../Core/Inc -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc" -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include" -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I../Drivers/CMSIS/Include -include"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc/can_frame.h" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f0xx_hal_msp.c" -mcpu=cortex-m0 -std=gnu11 -g3 -DDEBUG -DRING_ENCODER -DUSE_HAL_DRIVER -DSTM32F042x6 -DSTM32F042K4T6 -c -I../Core/Inc -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc" -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include" -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I../Drivers/CMSIS/Include -include"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc/can_frame.h" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/stm32f0xx_hal_msp.d" -MT"Core/Src/stm32f0xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f0xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f0xx_it.c" -mcpu=cortex-m0 -std=gnu11 -g3 -DDEBUG -DRING_ENCODER -DUSE_HAL_DRIVER -DSTM32F042x6 -DSTM32F042K4T6 -c -I../Core/Inc -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc" -I"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include" -I../Drivers/STM32F0xx_HAL_Driver/Inc -I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I../Drivers/CMSIS/Include -include"C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/can/inc/can_frame.h" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/stm32f0xx_it.d" -MT"Core/Src/stm32f0xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f0xx_it.o"
+In file included from ../Core/Inc/main.h:35,
+                 from ../Core/Src/main.c:21:
+C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include/can.h:7:10: fatal error: ../can/inc/can_frame.h: No such file or directory
+    7 | #include "../can/inc/can_frame.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Core/Inc/main.h:35,
+                 from ../Core/Inc/CAN_Driver.h:1,
+                 from ../Core/Src/CAN_Driver.c:1:
+C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include/can.h:7:10: fatal error: ../can/inc/can_frame.h: No such file or directory
+    7 | #include "../can/inc/can_frame.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+compilation terminated.
+In file included from ../Core/Inc/main.h:35,
+                 from ../Core/Src/stm32f0xx_it.c:22:
+C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include/can.h:7:10: fatal error: ../can/inc/can_frame.h: No such file or directory
+    7 | #include "../can/inc/can_frame.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Core/Src/subdir.mk:37: Core/Src/CAN_Driver.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+make: *** [Core/Src/subdir.mk:37: Core/Src/stm32f0xx_it.o] Error 1
+In file included from ../Core/Inc/main.h:35,
+                 from ../Core/Src/stm32f0xx_hal_msp.c:23:
+C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN/include/can.h:7:10: fatal error: ../can/inc/can_frame.h: No such file or directory
+    7 | #include "../can/inc/can_frame.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Core/Src/subdir.mk:37: Core/Src/stm32f0xx_hal_msp.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+
+23:30:23 Build Failed. 9 errors, 0 warnings. (took 435ms)
+

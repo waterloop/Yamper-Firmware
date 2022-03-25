@@ -32,6 +32,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "can.h"
 
 /* USER CODE END Includes */
 
@@ -61,6 +62,8 @@ void Error_Handler(void);
 #define DEBUG_Pin GPIO_PIN_7
 #define DEBUG_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+#define RING_ENCODER
+
 
 /* USER CODE END Private defines */
 

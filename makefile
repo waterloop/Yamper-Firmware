@@ -23,7 +23,7 @@ DEVICE_DIRNAME = STM32F042K4Tx
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O0
+OPT = -O2
 
 
 #######################################
@@ -95,7 +95,8 @@ AS_DEFS =
 C_DEFS = \
 -D USE_HAL_DRIVER \
 -D STM32F042x6 \
--D DEBUG
+-D DEBUG \
+-D RING_ENCODER
 
 
 # AS includes
@@ -107,7 +108,9 @@ C_INCLUDES =  \
 -I ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Inc \
 -I ./$(DEVICE_DIRNAME)/Drivers/STM32F0xx_HAL_Driver/Inc/Legacy \
 -I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Device/ST/STM32F0xx/Include \
--I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Include
+-I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Include \
+-I ./WLoopCAN/include
+
 
 C_INCLUDES += $(USER_INCLUDES)
 
@@ -159,7 +162,7 @@ $(BUILD_DIR)/%.o: %.s makefile | $(BUILD_DIR)
 	@echo ""
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) makefile
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) ./WLoopCAN/bin/wloop_can.a $(LDFLAGS) -o $@
 	@echo ""
 	$(SZ) $@
 	@echo ""

@@ -1,0 +1,13 @@
+23:30:16 **** Incremental Build of configuration Debug for project WLoopCAN ****
+make ring_encoder all 
+make -f main.mk \
+	BUILD_DIR=bin \
+	BOARD_VARS="ring_encoder.mk"
+make[1]: Entering directory 'C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory 'C:/Users/Haoji/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/stephen/yamper/Yamper-Firmware/WLoopCAN'
+Error: no rule to build "all", must specify board (ex. make master_bms)
+
+
+23:30:16 Build Failed. 1 errors, 0 warnings. (took 170ms)
+

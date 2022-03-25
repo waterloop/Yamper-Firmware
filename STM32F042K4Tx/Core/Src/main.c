@@ -124,6 +124,14 @@ int main(void)
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
 	HAL_CAN_Start(&hcan);
+	if(CANBus_init(&hcan, &htim16)!= HAL_OK)
+		Error_Handler();
+  if(CANBus_subscribe(RING_ENCODER_DATA) != HAL_OK)
+    Error_Handler();
+
+  CANFrame tx_frame = CANFrame_init(RING_ENCODER_DATA);
+  
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -135,6 +143,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+    //flag determine
 		new_time_stamp = __HAL_TIM_GET_COUNTER(&htim16);
 		if(new_time_stamp>=time_stamp)
 		{
@@ -151,10 +160,9 @@ int main(void)
 			total_time_passed = 0;
 			time_stamp = new_time_stamp;
 		}
-
-//	  add_data(&velocity, bytes_array, 32, 1, 0);
-//	  HAL_CAN_AddTxMessage(&hcan, &TxHeader, bytes_array, &TxMailbox);  // load message to mailbox
-//	  while (HAL_CAN_IsTxMessagePending(&hcan, TxMailbox)); 		//waiting till message gets through
+    CANFrame_set_field(&tx_frame, RE_POD_SPEED, FLOAT_TO_UINT(velocity));
+    if(CANBus_put_frame(&tx_frame) != HAL_OK)
+      Error_Handler();
 	}
   /* USER CODE END 3 */
 }
