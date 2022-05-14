@@ -111,7 +111,6 @@ C_INCLUDES =  \
 -I ./$(DEVICE_DIRNAME)/Drivers/CMSIS/Include \
 -I ./WLoopCAN/include
 
-
 C_INCLUDES += $(USER_INCLUDES)
 
 # compile gcc flags
@@ -140,7 +139,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+all: can_library $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
 
 #######################################
@@ -181,12 +180,16 @@ $(BUILD_DIR):
 #######################################
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf ./WLoopCAN/bin
 
 analyze:
 	$(PREFIX)objdump -t $(BUILD_DIR)/$(TARGET).elf
 
 flash:
 	st-flash write $(BUILD_DIR)/main.bin 0x08000000 
+
+can_library: 
+	cd WLoopCAN && make ring_encoder
 
 #######################################
 # dependencies
