@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "main.h": "c",
-        "stm32f0xx_hal.h": "c",
-        "can.h": "c"
-    }
-}
