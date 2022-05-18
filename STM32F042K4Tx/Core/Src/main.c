@@ -56,8 +56,6 @@ TIM_HandleTypeDef htim16;
 
 /* USER CODE BEGIN PV */
 uint8_t bytes_array[4];
-CAN_TxHeaderTypeDef TxHeader;
-extern uint32_t TxMailbox;
 uint32_t counter = 0;
 uint32_t time_stamp = 0;
 float total_time_passed = 0;
@@ -238,8 +236,6 @@ static void MX_CAN_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN_Init 2 */
-	TxHeader.StdId = 0x1F;
-	TxHeader.ExtId = 0;
   /* USER CODE END CAN_Init 2 */
 
 }
@@ -345,6 +341,8 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+  WLoopCAN_timer_isr(htim);
+  
 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
 }
 

@@ -2,14 +2,14 @@
 
 ### Build Instructions
 
-**STM32CubeIDE**
-
-Should build out of the box.
-
 **GNU Make**
 
-```bash
+```
+bash
 cd /path/to/project
+git checkout develop 
+
+git submodule update --init --recursive --remote 
 make
 ```
 
