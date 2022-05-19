@@ -57,7 +57,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern TIM_HandleTypeDef htim14;
+extern TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN EV */
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim14;
@@ -174,17 +174,17 @@ void EXTI4_15_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM14 global interrupt.
+  * @brief This function handles TIM16 global interrupt.
   */
-void TIM14_IRQHandler(void)
+void TIM16_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM14_IRQn 0 */
+  /* USER CODE BEGIN TIM16_IRQn 0 */
 
-  /* USER CODE END TIM14_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim14);
-  /* USER CODE BEGIN TIM14_IRQn 1 */
+  /* USER CODE END TIM16_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim16);
+  /* USER CODE BEGIN TIM16_IRQn 1 */
 
-  /* USER CODE END TIM14_IRQn 1 */
+  /* USER CODE END TIM16_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
