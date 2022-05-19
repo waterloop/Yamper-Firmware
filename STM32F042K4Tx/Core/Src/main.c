@@ -138,7 +138,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  // Timer interrupt for 100 ms
+  // Timer for sampling 
 	HAL_TIM_Base_Start(&htim14);
   __HAL_TIM_SET_COUNTER(&htim14, 0);
 	while (1) {
@@ -146,7 +146,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    //flag determine
+    // Get timer value and corresponding time passed
 		new_time_stamp = __HAL_TIM_GET_COUNTER(&htim14);
 		if(new_time_stamp>=time_stamp)
 		{
@@ -256,6 +256,16 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE BEGIN TIM14_Init 1 */
 
+  /* 
+   * TIM14 = timer for encoder
+   * No interrupt, just a plain counter
+   * freq = clock freq / (prescalar + 1) * (counter period + 1) * (repetition counter + 1)
+   *      = 42 MHz/(41999 + 1)(65535 + 1)(1)
+   *      = 42 MHz/(42000)(65536)
+   *      ~= 0.015 Hz 
+   * period = 1/0.015Hz ~= 65 s
+   */
+
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = 41999;
@@ -344,12 +354,13 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   /* 
-   * tim14 should call interrupt every 200 ms
+   * TIM16 = timer for WLoopCAN
+   * tim16 should call interrupt every 200 ms 
    * freq = clock freq / (prescalar + 1) * (counter period + 1) * (repetition counter + 1)
-   *      = 42 MHz/(99 + 1)(41999+1)(1)
-   *      = 42 MHz/(100)(42000)
-   *      = 10 Hz 
-   * period = 1/10 s = 100 ms
+   *      = 42 MHz/(2099 + 1)(9999+1)(1)
+   *      = 42 MHz/(2100)(10000)
+   *      = 2 Hz 
+   * period = 1/2Hz = 500 ms
    */ 
 
   WLoopCAN_timer_isr(htim);
@@ -357,15 +368,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
 }
 
+// GPIO pin interrupt
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	counter++;
 	flag = 1;
 	loop_count++;
-	if(loop_count ==12)
+	if(loop_count == 12)
 	{
 		loop++;
-		loop_count =0;
+		loop_count = 0;
 	}
 }
 
