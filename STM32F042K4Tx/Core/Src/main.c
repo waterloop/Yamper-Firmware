@@ -138,14 +138,16 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-	HAL_TIM_Base_Start(&htim16);
+  // Timer interrupt for 100 ms
+	HAL_TIM_Base_Start(&htim14);
+  __HAL_TIM_SET_COUNTER(&htim14, 0);
 	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
     //flag determine
-		new_time_stamp = __HAL_TIM_GET_COUNTER(&htim16);
+		new_time_stamp = __HAL_TIM_GET_COUNTER(&htim14);
 		if(new_time_stamp>=time_stamp)
 		{
 			total_time_passed = new_time_stamp - time_stamp;
@@ -341,8 +343,17 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+  /* 
+   * tim14 should call interrupt every 200 ms
+   * freq = clock freq / (prescalar + 1) * (counter period + 1) * (repetition counter + 1)
+   *      = 42 MHz/(99 + 1)(41999+1)(1)
+   *      = 42 MHz/(100)(42000)
+   *      = 10 Hz 
+   * period = 1/10 s = 100 ms
+   */ 
+
   WLoopCAN_timer_isr(htim);
-  
+
 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
 }
 
