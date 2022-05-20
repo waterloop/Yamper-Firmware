@@ -23,7 +23,7 @@ DEVICE_DIRNAME = STM32F042K4Tx
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O2
+OPT = -Og
 
 
 #######################################
@@ -187,6 +187,7 @@ analyze:
 
 flash:
 	st-flash write $(BUILD_DIR)/main.bin 0x08000000 
+	st-flash reset
 
 libs: 
 	cd WLoopCAN && make ring_encoder

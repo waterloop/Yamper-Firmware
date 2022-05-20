@@ -124,11 +124,12 @@ int main(void)
   MX_TIM16_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
-	HAL_CAN_Start(&hcan);
-	if(CANBus_init(&hcan, &htim16)!= HAL_OK)
-		Error_Handler();
-  if(CANBus_subscribe(RING_ENCODER_DATA) != HAL_OK)
+  if(CANBus_init(&hcan, &htim16)!= HAL_OK) {
     Error_Handler();
+  }
+  if(CANBus_subscribe(RING_ENCODER_DATA) != HAL_OK) {
+    Error_Handler();
+  }
 
   CANFrame tx_frame = CANFrame_init(RING_ENCODER_DATA);
   
@@ -163,10 +164,12 @@ int main(void)
 			total_time_passed = 0;
 			time_stamp = new_time_stamp;
 		}
-    CANFrame_set_field(&tx_frame, RE_POD_SPEED, FLOAT_TO_UINT(velocity));
-    if(CANBus_put_frame(&tx_frame) != HAL_OK)
-      Error_Handler();
-	}
+      CANFrame_set_field(&tx_frame, RE_POD_SPEED, FLOAT_TO_UINT(velocity));
+      if(CANBus_put_frame(&tx_frame) != HAL_OK) {
+        Error_Handler();  
+      }
+      HAL_Delay(200);
+    }
   /* USER CODE END 3 */
 }
 
