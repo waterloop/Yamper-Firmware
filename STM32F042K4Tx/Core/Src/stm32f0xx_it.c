@@ -23,6 +23,7 @@
 #include "stm32f0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,11 +33,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+#define R 0.057
 
 /* USER CODE END PM */
 
@@ -56,9 +57,16 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim16;
+extern TIM_HandleTypeDef htim17;
+/* USER CODE BEGIN EV */
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim14;
-/* USER CODE BEGIN EV */
+extern uint32_t elapsed_time;
+extern uint32_t loop;
+extern float *velocity;
+extern uint32_t old_loop;
+
 
 /* USER CODE END EV */
 
@@ -127,7 +135,16 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
+//	elapsed_time++;
 
+	//once a loop has passed, refresh the velocity value
+//	if(loop!=old_loop)
+//	{
+//		*velocity = (2*M_PI*R)/(elapsed_time/1000);
+//		elapsed_time = 0;
+//		loop = 0;
+//		old_loop =0;
+//	}
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -143,34 +160,49 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM3 global interrupt.
+  * @brief This function handles EXTI line 4 to 15 interrupts.
   */
-void TIM3_IRQHandler(void)
+void EXTI4_15_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM3_IRQn 0 */
+  /* USER CODE BEGIN EXTI4_15_IRQn 0 */
 
-  /* USER CODE END TIM3_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim3);
-  /* USER CODE BEGIN TIM3_IRQn 1 */
+  /* USER CODE END EXTI4_15_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_6);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
+  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
-  /* USER CODE END TIM3_IRQn 1 */
+  /* USER CODE END EXTI4_15_IRQn 1 */
 }
 
 /**
-  * @brief This function handles TIM14 global interrupt.
+  * @brief This function handles TIM16 global interrupt.
   */
-void TIM14_IRQHandler(void)
+void TIM16_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM14_IRQn 0 */
+  /* USER CODE BEGIN TIM16_IRQn 0 */
 
-  /* USER CODE END TIM14_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim14);
-  /* USER CODE BEGIN TIM14_IRQn 1 */
+  /* USER CODE END TIM16_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim16);
+  /* USER CODE BEGIN TIM16_IRQn 1 */
 
-  /* USER CODE END TIM14_IRQn 1 */
+  /* USER CODE END TIM16_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM17 global interrupt.
+  */
+void TIM17_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM17_IRQn 0 */
+
+  /* USER CODE END TIM17_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim17);
+  /* USER CODE BEGIN TIM17_IRQn 1 */
+
+  /* USER CODE END TIM17_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
