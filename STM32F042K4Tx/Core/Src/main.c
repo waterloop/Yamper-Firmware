@@ -35,11 +35,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define R 0.057
-#define SAMPLING_PERIOD_S 0.2
-#define N 12
-#define MAX_COUNTER 65535
-
+#define PI              atan(1)*4
+#define RADIUS          0.057
+#define CIRCUMFRENCE    2*PI*RADIUS
 // what is the N for
 /* USER CODE END PD */
 
@@ -56,18 +54,13 @@ TIM_HandleTypeDef htim16;
 TIM_HandleTypeDef htim17;
 
 /* USER CODE BEGIN PV */
-uint8_t bytes_array[4];
-uint32_t counter = 0;
-uint32_t time_stamp = 0;
-float total_time_passed = 0;
-uint32_t new_time_stamp = 0;
-float velocity = 0;
-uint32_t loop = 0;
-uint32_t loop_count = 0;
+uint32_t prev_ms = 0;
+uint32_t curr_ms = 0;
+uint32_t cnt = 0;
+uint8_t stripe_passed = 0;
+float meters_p_sec = 0;
 
-
-int flag = 0;
-
+uint8_t send_can = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -135,43 +128,32 @@ int main(void)
   }
 
   CANFrame tx_frame = CANFrame_init(RING_ENCODER_DATA);
-  
+  HAL_TIM_Base_Start(&htim14);
+  HAL_TIM_Base_Start(&htim16);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  // Timer for sampling 
-	HAL_TIM_Base_Start(&htim14);
-  __HAL_TIM_SET_COUNTER(&htim14, 0);
 	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    // Get timer value and corresponding time passed
-		new_time_stamp = __HAL_TIM_GET_COUNTER(&htim14);
-		if(new_time_stamp>=time_stamp)
-		{
-			total_time_passed = new_time_stamp - time_stamp;
-		}
-		else
-		{
-			total_time_passed = MAX_COUNTER - time_stamp + new_time_stamp;
-		}
-		if(total_time_passed >= 200 && flag == 1)
-		{
-			velocity = (float)(counter*2*M_PI*R)/(N*SAMPLING_PERIOD_S);
-			counter = 0;
-			total_time_passed = 0;
-			time_stamp = new_time_stamp;
-		}
-      CANFrame_set_field(&tx_frame, RE_POD_SPEED, FLOAT_TO_UINT(velocity));
-      if(CANBus_put_frame(&tx_frame) != HAL_OK) {
-        Error_Handler();  
+      if (stripe_passed == 1) {
+        uint32_t time_elapsed_ms = curr_ms - prev_ms;
+        meters_p_sec = (CIRCUMFRENCE/3)/( ((float)time_elapsed_ms)*1E3 );
+        stripe_passed = 0;
       }
-      HAL_Delay(200);
+
+      if (send_can) {
+        CANFrame_set_field(&tx_frame, RE_POD_SPEED, FLOAT_TO_UINT(meters_p_sec));
+        if(CANBus_put_frame(&tx_frame) != HAL_OK) {
+          Error_Handler();  
+        }
+        send_can = 0;
+      }
+      // HAL_Delay(200);
     }
   /* USER CODE END 3 */
 }
@@ -401,22 +383,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
    * period = 1/2Hz = 500 ms
    */ 
 
+  if (htim == (&htim16)) {
+    send_can = 1;
+  }
+
   WLoopCAN_timer_isr(htim);
 
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
 }
 
 // GPIO pin interrupt
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	counter++;
-	flag = 1;
-	loop_count++;
-	if(loop_count == 12)
-	{
-		loop++;
-		loop_count = 0;
-	}
+  prev_ms = curr_ms;
+  curr_ms = HAL_GetTick();
+  stripe_passed = 1;
 }
 
 /* USER CODE END 4 */
