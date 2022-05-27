@@ -129,7 +129,7 @@ int main(void)
 
   CANFrame tx_frame = CANFrame_init(RING_ENCODER_DATA);
   HAL_TIM_Base_Start(&htim14);
-  HAL_TIM_Base_Start(&htim16);
+  HAL_TIM_Base_Start_IT(&htim16);
 
   /* USER CODE END 2 */
 
